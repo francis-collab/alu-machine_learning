@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""Returns the shape of a numpy.ndarray as a tuple of integers."""
+
+
 def np_shape(matrix):
     """
     Calculate the shape of a numpy.ndarray.

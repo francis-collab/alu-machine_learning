@@ -6,6 +6,6 @@ import matplotlib.pyplot as plt
 
 y = np.arange(0, 11) ** 3
 
-iplt.plot(y, 'r-')
+plt.plot(y, 'r-')
 plt.xlim(0, 10)
 plt.show()

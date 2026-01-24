@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Module for transposing a NumPy array."""
 
-import numpy as np
-
 
 def np_transpose(matrix):
     """
@@ -14,4 +12,4 @@ def np_transpose(matrix):
     Returns:
         numpy.ndarray: The transposed array.
     """
-    return np.transpose(matrix)
+    return matrix.T

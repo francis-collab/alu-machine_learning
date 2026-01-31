@@ -27,7 +27,9 @@ def cofactor(matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
     def det_helper(m):
-        """Helper function to compute determinant recursively, handles empty for submatrices."""
+        """Helper function to compute determinant recursively, 
+        handles empty for submatrices.
+        """
         if len(m) == 0:
             return 1
         k = len(m)

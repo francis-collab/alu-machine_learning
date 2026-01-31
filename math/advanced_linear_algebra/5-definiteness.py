@@ -25,26 +25,22 @@ def definiteness(matrix):
     if matrix.shape[0] == 0:
         return None
 
-    # Very important: check if symmetric (within floating-point tolerance)
-    if not np.allclose(matrix, matrix.T):
+    eigenvalues = np.linalg.eigvals(matrix)
+
+    if not np.all(np.isreal(eigenvalues)):
         return None
 
-    eigs = np.linalg.eigvals(matrix)
+    eigenvalues = np.real(eigenvalues)
 
-    # If any eigenvalue is complex → not real symmetric → None
-    if not np.all(np.isreal(eigs)):
-        return None
-
-    eigs = np.real(eigs)
-
-    if np.all(eigs > 0):
+    if np.all(eigenvalues > 0):
         return "Positive definite"
-    elif np.all(eigs >= 0):
+    if np.all(eigenvalues >= 0):
         return "Positive semi-definite"
-    elif np.all(eigs < 0):
+    if np.all(eigenvalues < 0):
         return "Negative definite"
-    elif np.all(eigs <= 0):
+    if np.all(eigenvalues <= 0):
         return "Negative semi-definite"
-    else:
-        # Has both positive and negative (or zero in mixed way)
+    if np.any(eigenvalues > 0) and np.any(eigenvalues < 0):
         return "Indefinite"
+
+    return None

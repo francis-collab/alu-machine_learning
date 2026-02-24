@@ -28,7 +28,7 @@ Run them after placing the files in `math/multivariate_prob/`:
 ./1-main.py
 ./2-main.py
 ./3-main.py
-
+```
 Expected outputs match the examples exactly (up to floating-point precision).
 
 ## Repository Structure (as required)

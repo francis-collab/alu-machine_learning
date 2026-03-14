@@ -2,7 +2,6 @@
 """Convolution on grayscale images with padding & stride."""
 
 import numpy as np
-from math import ceil, floor
 
 
 def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
@@ -31,8 +30,9 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
 
     padded = np.pad(images, ((0, 0), (ph, ph), (pw, pw)), mode='constant')
 
-    out_h = (h + 2 * ph - kh) // sh + 1
-    out_w = (w + 2 * pw - kw) // sw + 1
+    # Integer arithmetic equivalent to floor division + 1
+    out_h = ((h + 2 * ph - kh) // sh) + 1
+    out_w = ((w + 2 * pw - kw) // sw) + 1
 
     output = np.zeros((m, out_h, out_w))
 

@@ -2,7 +2,6 @@
 """Convolution on images with channels."""
 
 import numpy as np
-from math import ceil, floor
 
 
 def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
@@ -17,7 +16,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     Returns:
         np.ndarray: convolved images (m, out_h, out_w)
     """
-    m, h, w, c = images.shape
+    m, h, w, c_in = images.shape   # renamed c → c_in for clarity
     kh, kw, kc = kernel.shape
     sh, sw = stride
 
@@ -31,8 +30,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
 
     padded = np.pad(images, ((0, 0), (ph, ph), (pw, pw), (0, 0)), mode='constant')
 
-    out_h = (h + 2 * ph - kh) // sh + 1
-    out_w = (w + 2 * pw - kw) // sw + 1
+    out_h = ((h + 2 * ph - kh) // sh) + 1
+    out_w = ((w + 2 * pw - kw) // sw) + 1
 
     output = np.zeros((m, out_h, out_w))
 

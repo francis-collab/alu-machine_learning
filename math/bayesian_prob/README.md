@@ -1,32 +1,38 @@
 # Bayesian Probability – Binomial Likelihood & Posterior Calculation
 
-This project implements core components of **Bayesian inference** for binomial data (e.g. success/failure outcomes such as patients developing side effects after taking a drug).
+This project implements core components of **Bayesian inference** for binomial data (e.g., success/failure outcomes such as patients developing side effects after taking a drug).
 
 The goal is to compute:
 
 - Likelihood of observed data given different candidate probabilities
 - Intersection (likelihood × prior)
 - Marginal probability of the data
-- Posterior probability distribution (updated beliefs after seeing data)
+- Posterior probability distribution (updated beliefs after observing data)
 
 All functions follow strict input validation and are implemented using only `numpy`.
 
+---
+
 ## Files
 
-| File                  | Description                                                                 |
-|-----------------------|-----------------------------------------------------------------------------|
-| `0-likelihood.py`     | Computes binomial likelihood P(data \| p) for many candidate values of p   |
-| `1-intersection.py`   | Computes unnormalized posterior = likelihood × prior                        |
-| `2-marginal.py`       | Computes marginal probability P(data) = Σ (likelihood × prior)             |
-| `3-posterior.py`      | Computes normalized posterior P(p \| data)                                 |
+| File | Description |
+|-----|-------------|
+| `0-likelihood.py` | Computes binomial likelihood `P(data \| p)` for multiple candidate values of `p` |
+| `1-intersection.py` | Computes the unnormalized posterior = likelihood × prior |
+| `2-marginal.py` | Computes the marginal probability `P(data) = Σ (likelihood × prior)` |
+| `3-posterior.py` | Computes the normalized posterior `P(p \| data)` |
+
+---
 
 ## Project Requirements
 
-- Python 3.5
-- numpy 1.15
-- Ubuntu 16.04 LTS environment
-- Code style: pycodestyle 2.5
+- Python 3.5  
+- `numpy` 1.15  
+- Ubuntu 16.04 LTS environment  
+- Code style: `pycodestyle` 2.5  
 - No external libraries except `numpy`
+
+---
 
 ## Usage Example
 
@@ -58,6 +64,9 @@ m = marginal(x, n, P, Pr)
 # 3. Posterior P(p | data)
 from posterior import posterior
 post = posterior(x, n, P, Pr)
+```
+
+---
 
 ## Expected Output (uniform prior, x=26, n=130)
 
@@ -79,11 +88,11 @@ Posterior:
 
 ## Learning Objectives
 
-- Understand the four key terms in Bayes' theorem:
-  - Prior P(p)
-  - Likelihood P(data | p)
-  - Marginal / Evidence P(data)
-  - Posterior P(p | data)
+- Understand the four key terms in **Bayes' theorem**:
+  - Prior `P(p)`
+  - Likelihood `P(data | p)`
+  - Marginal / Evidence `P(data)`
+  - Posterior `P(p | data)`
 
 - Implement proper input validation and meaningful error messages
 

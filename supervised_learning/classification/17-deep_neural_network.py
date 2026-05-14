@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""DeepNeuralNetwork with private attributes."""
+"""DeepNeuralNetwork - Task 17 (Private)"""
 
 import numpy as np
 
 
 class DeepNeuralNetwork:
-    """Class that defines a deep neural network."""
+    """Defines a deep neural network."""
 
     def __init__(self, nx, layers):
-        """Initialize DeepNeuralNetwork."""
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         if nx < 1:
@@ -22,11 +21,10 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for l in range(1, self.__L + 1):
-            layer_size = layers[l-1]
-            prev_size = nx if l == 1 else layers[l-2]
-            self.__weights[f'W{l}'] = np.random.randn(layer_size, prev_size) * np.sqrt(2 / prev_size)
-            self.__weights[f'b{l}'] = np.zeros((layer_size, 1))
+        for i in range(1, self.__L + 1):   # Only one loop
+            prev = nx if i == 1 else layers[i-2]
+            self.__weights[f'W{i}'] = np.random.randn(layers[i-1], prev) * np.sqrt(2 / prev)
+            self.__weights[f'b{i}'] = np.zeros((layers[i-1], 1))
 
     @property
     def L(self):

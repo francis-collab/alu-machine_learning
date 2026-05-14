@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""DeepNeuralNetwork Forward Propagation."""
+"""DeepNeuralNetwork Forward Propagation - One loop only"""
 
 import numpy as np
 
 
 class DeepNeuralNetwork:
-    """Class that defines a deep neural network."""
+    """Defines a deep neural network."""
 
     def __init__(self, nx, layers):
         if not isinstance(nx, int):
@@ -21,11 +21,10 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for l in range(1, self.__L + 1):
-            layer_size = layers[l-1]
-            prev_size = nx if l == 1 else layers[l-2]
-            self.__weights[f'W{l}'] = np.random.randn(layer_size, prev_size) * np.sqrt(2 / prev_size)
-            self.__weights[f'b{l}'] = np.zeros((layer_size, 1))
+        for i in range(1, self.__L + 1):
+            prev = nx if i == 1 else layers[i-2]
+            self.__weights[f'W{i}'] = np.random.randn(layers[i-1], prev) * np.sqrt(2 / prev)
+            self.__weights[f'b{i}'] = np.zeros((layers[i-1], 1))
 
     @property
     def L(self):
@@ -40,17 +39,14 @@ class DeepNeuralNetwork:
         return self.__weights
 
     def forward_prop(self, X):
-        """Calculates forward propagation."""
+        """Forward propagation - One loop only."""
         self.__cache['A0'] = X
         A = X
 
-        for l in range(1, self.__L + 1):
-            Z = np.matmul(self.__weights[f'W{l}'], A) + self.__weights[f'b{l}']
-            if l == self.__L:
-                A = 1 / (1 + np.exp(-Z))  # Output layer
-            else:
-                A = 1 / (1 + np.exp(-Z))
-            self.__cache[f'A{l}'] = A
+        for i in range(1, self.__L + 1):
+            Z = np.matmul(self.__weights[f'W{i}'], A) + self.__weights[f'b{i}']
+            A = 1 / (1 + np.exp(-Z))
+            self.__cache[f'A{i}'] = A
 
         return A, self.__cache
     

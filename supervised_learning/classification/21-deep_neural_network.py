@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""DeepNeuralNetwork Gradient Descent."""
+"""DeepNeuralNetwork Gradient Descent - Task 21"""
 
 import numpy as np
 
@@ -21,11 +21,10 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for l in range(1, self.__L + 1):
-            layer_size = layers[l-1]
-            prev_size = nx if l == 1 else layers[l-2]
-            self.__weights[f'W{l}'] = np.random.randn(layer_size, prev_size) * np.sqrt(2 / prev_size)
-            self.__weights[f'b{l}'] = np.zeros((layer_size, 1))
+        for i in range(1, self.__L + 1):
+            prev = nx if i == 1 else layers[i-2]
+            self.__weights[f'W{i}'] = np.random.randn(layers[i-1], prev) * np.sqrt(2 / prev)
+            self.__weights[f'b{i}'] = np.zeros((layers[i-1], 1))
 
     @property
     def L(self):
@@ -42,38 +41,27 @@ class DeepNeuralNetwork:
     def forward_prop(self, X):
         self.__cache['A0'] = X
         A = X
-        for l in range(1, self.__L + 1):
-            Z = np.matmul(self.__weights[f'W{l}'], A) + self.__weights[f'b{l}']
+        for i in range(1, self.__L + 1):
+            Z = np.matmul(self.__weights[f'W{i}'], A) + self.__weights[f'b{i}']
             A = 1 / (1 + np.exp(-Z))
-            self.__cache[f'A{l}'] = A
+            self.__cache[f'A{i}'] = A
         return A, self.__cache
 
-    def cost(self, Y, A):
-        m = Y.shape[1]
-        cost = - (1 / m) * np.sum(Y * np.log(A) + (1.0000001 - Y) * np.log(1.0000001 - A))
-        return cost
-
-    def evaluate(self, X, Y):
-        A, _ = self.forward_prop(X)
-        cost = self.cost(Y, A)
-        prediction = np.where(A >= 0.5, 1, 0)
-        return prediction, cost
-
     def gradient_descent(self, Y, cache, alpha=0.05):
-        """Calculates one pass of gradient descent."""
+        """One pass of gradient descent - One loop only."""
         m = Y.shape[1]
         L = self.__L
         A = cache[f'A{L}']
         dZ = A - Y
 
-        for l in range(L, 0, -1):
-            A_prev = cache[f'A{l-1}']
+        for i in range(L, 0, -1):
+            A_prev = cache[f'A{i-1}']
             dW = (1 / m) * np.matmul(dZ, A_prev.T)
             db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
 
-            self.__weights[f'W{l}'] -= alpha * dW
-            self.__weights[f'b{l}'] -= alpha * db
+            self.__weights[f'W{i}'] -= alpha * dW
+            self.__weights[f'b{i}'] -= alpha * db
 
-            if l > 1:
-                dZ = np.matmul(self.__weights[f'W{l}'].T, dZ) * A_prev * (1 - A_prev)
+            if i > 1:
+                dZ = np.matmul(self.__weights[f'W{i}'].T, dZ) * A_prev * (1 - A_prev)
                 

@@ -1,6 +1,6 @@
 # Supervised Learning - Classification
 
-This project implements various **Classification models from scratch** using only `numpy`, following the Holberton / ALX curriculum.
+This project implements various **Classification models from scratch** using only `numpy`
 
 ## Project Structure
 
@@ -69,6 +69,7 @@ This project implements various **Classification models from scratch** using onl
 
 # Test Deep Neural Network (multiclass)
 ./27-main.py
+```
 
 ## Datasets Used
 

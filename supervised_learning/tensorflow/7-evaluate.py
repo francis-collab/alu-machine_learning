@@ -29,4 +29,3 @@ def evaluate(X, Y, save_path):
                                    feed_dict={x: X, y: Y})
 
     return pred, acc, cost
-

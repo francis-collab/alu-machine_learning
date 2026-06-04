@@ -16,4 +16,3 @@ def create_train_op(loss, alpha):
     """
     train_op = tf.train.GradientDescentOptimizer(alpha).minimize(loss)
     return train_op
-

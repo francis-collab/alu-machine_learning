@@ -1,4 +1,4 @@
-orFlow - Supervised Learning
+TensorFlow - Supervised Learning
 
 This project implements a neural network from scratch using **TensorFlow 1.12** (without Keras).
 

@@ -1,42 +1,63 @@
 #!/usr/bin/env python3
-"""Sparse Autoencoder"""
+"""
+Defines function that creates a sparse autoencoder
+"""
+
 
 import tensorflow.keras as keras
-from tensorflow.keras import regularizers
 
 
 def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
-    """Creates a sparse autoencoder.
-
-    Args:
-        input_dims (int): Dimensions of the input.
-        hidden_layers (list): Number of nodes in hidden layers.
-        latent_dims (int): Dimensions of latent space.
-        lambtha (float): Regularization parameter for L1.
-
-    Returns:
-        encoder, decoder, auto (keras models)
     """
-    # Encoder
-    inputs = keras.Input(shape=(input_dims,))
-    x = inputs
+    Creates a sparse autoencoder
+    """
+    if type(input_dims) is not int:
+        raise TypeError(
+            "input_dims must be an int containing dimensions of model input")
+    if type(hidden_layers) is not list:
+        raise TypeError("hidden_layers must be a list of ints \
+        representing number of nodes for each layer")
     for nodes in hidden_layers:
-        x = keras.layers.Dense(nodes, activation='relu')(x)
-    latent = keras.layers.Dense(latent_dims, activation='relu',
-                                activity_regularizer=regularizers.l1(lambtha))(x)
-    encoder = keras.Model(inputs, latent, name="encoder")
+        if type(nodes) is not int:
+            raise TypeError("hidden_layers must be a list of ints \
+            representing number of nodes for each layer")
+    if type(latent_dims) is not int:
+        raise TypeError("latent_dims must be an int containing dimensions of \
+        latent space representation")
+    if type(lambtha) is not float:
+        raise TypeError("lambtha must be float representing the \
+        regularization parameter used for L1 regularization")
 
-    # Decoder
-    latent_input = keras.Input(shape=(latent_dims,))
-    x = latent_input
-    for nodes in reversed(hidden_layers):
-        x = keras.layers.Dense(nodes, activation='relu')(x)
-    outputs = keras.layers.Dense(input_dims, activation='sigmoid')(x)
-    decoder = keras.Model(latent_input, outputs, name="decoder")
+    # encoder
+    encoder_inputs = keras.Input(shape=(input_dims,))
+    encoder_value = encoder_inputs
+    for i in range(len(hidden_layers)):
+        encoder_layer = keras.layers.Dense(units=hidden_layers[i],
+                                           activation='relu')
+        encoder_value = encoder_layer(encoder_value)
+    regularizer = keras.regularizers.l1(lambtha)
+    encoder_output_layer = keras.layers.Dense(units=latent_dims,
+                                              activation='relu',
+                                              activity_regularizer=regularizer)
+    encoder_outputs = encoder_output_layer(encoder_value)
+    encoder = keras.Model(inputs=encoder_inputs, outputs=encoder_outputs)
 
-    # Autoencoder
-    auto_outputs = decoder(encoder(inputs))
-    auto = keras.Model(inputs, auto_outputs, name="autoencoder")
-    auto.compile(optimizer='adam', loss='binary_crossentropy')
+    # decoder
+    decoder_inputs = keras.Input(shape=(latent_dims,))
+    decoder_value = decoder_inputs
+    for i in range(len(hidden_layers) - 1, -1, -1):
+        decoder_layer = keras.layers.Dense(units=hidden_layers[i],
+                                           activation='relu')
+        decoder_value = decoder_layer(decoder_value)
+    decoder_output_layer = keras.layers.Dense(units=input_dims,
+                                              activation='sigmoid')
+    decoder_outputs = decoder_output_layer(decoder_value)
+    decoder = keras.Model(inputs=decoder_inputs, outputs=decoder_outputs)
+
+    # autoencoder
+    inputs = encoder_inputs
+    auto = keras.Model(inputs=inputs, outputs=decoder(encoder(inputs)))
+    auto.compile(optimizer='adam',
+                 loss='binary_crossentropy')
 
     return encoder, decoder, auto
